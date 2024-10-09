@@ -13,4 +13,6 @@ bool Database::connect() {
   return true;
 }
 
-Database::createTables() {}
+Database::createTables() {
+  .
+}

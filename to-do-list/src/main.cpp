@@ -45,7 +45,7 @@ public:
   void displayTask() const {
     cout << name << " (" << (completed ? "Completed" : "Pending")
          << ") - Due: " << dueDate << endl
-         << "    Description: " << description << endl;
+         << "   Description: " << description << endl;
   }
 };
 
@@ -87,11 +87,11 @@ public:
       return;
     }
     cout << "Tasks:" << endl;
-    for (int i = 0; i < tasks.size(); ++i) {
+    for (unsigned int i = 0; i < tasks.size(); ++i) {
       cout << i + 1 << ". " << tasks[i].getName() << endl;
     }
     cout << "Enter the task number to delete: ";
-    int taskNumber;
+    unsigned int taskNumber;
     cin >> taskNumber;
     if (taskNumber >= 1 && taskNumber <= tasks.size()) {
       tasks.erase(tasks.begin() + taskNumber + 1);
@@ -107,7 +107,7 @@ public:
       return;
     }
     cout << "Tasks:" << endl;
-    for (int i = 0; i < tasks.size(); ++i) {
+    for (unsigned int i = 0; i < tasks.size(); ++i) {
       cout << i + 1 << ". ";
       tasks[i].displayTask();
     }
@@ -119,11 +119,11 @@ public:
       return;
     }
     cout << "Tasks:" << endl;
-    for (int i = 0; i < tasks.size(); ++i) {
+    for (unsigned int i = 0; i < tasks.size(); ++i) {
       cout << i + 1 << ". " << tasks[i].getName() << endl;
     }
     cout << "Enter the task number to mark as completed: ";
-    int taskNumber;
+    unsigned int taskNumber;
     cin >> taskNumber;
     if (taskNumber >= 1 && taskNumber <= tasks.size()) {
       tasks[taskNumber - 1].markCompleted();
@@ -139,11 +139,11 @@ public:
       return;
     }
     cout << "Tasks:" << endl;
-    for (int i = 0; i < tasks.size(); ++i) {
+    for (unsigned int i = 0; i < tasks.size(); ++i) {
       cout << i + 1 << ". " << tasks[i].getName() << endl;
     }
     cout << "Enter the task number to edit: ";
-    int taskNumber;
+    unsigned int taskNumber;
     cin >> taskNumber;
     if (taskNumber >= 1 && taskNumber <= tasks.size()) {
       Task &task = tasks[taskNumber - 1];

@@ -122,6 +122,7 @@ int main() {
     refresh();
 
     switch (choice) {
+      int indexChoice;
     case 1:
       clear();
       printw("Add new task: ");
@@ -136,16 +137,16 @@ int main() {
       clear();
       printw("Enter index of task to complete: ");
       refresh();
-      scanw("%d", &choice);
+      scanw("%d", &indexChoice);
       noecho();
-      markComplete(&todolist, choice - 1);
+      markComplete(&todolist, indexChoice - 1);
       break;
     case 3:
       clear();
       printw("Enter the index of the task to delete: ");
       refresh();
-      scanw("%d", &choice);
-      deleteItem(&todolist, choice - 1);
+      scanw("%d", &indexChoice);
+      deleteItem(&todolist, indexChoice - 1);
       break;
     case 4:
       saveToFile(&todolist, fileName);

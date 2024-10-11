@@ -106,6 +106,7 @@ void searchTasks(todoList *list) {
   noecho();
 
   int found = 0;
+  clear();
   for (int i = 0; i < list->count; ++i) {
     char *ptr = strcasestr(list->items[i].task, searchTerm);
     if (ptr != NULL) {
@@ -115,11 +116,13 @@ void searchTasks(todoList *list) {
       found = 1;
     }
   }
-  printw("Found it\n");
 
   if (!found) {
     printw("No tasks found\n");
   }
+  printw("\nPress any key to return to the menu...");
+  refresh();
+  getch();
 }
 
 void filterTasks(todoList *list) {
@@ -139,12 +142,22 @@ void filterTasks(todoList *list) {
   scanw("%d", &completed);
   noecho();
 
+  clear();
+  int found = 0;
   for (int i = 0; i < list->count; ++i) {
     if ((priority == 0 || list->items[i].priority == priority) &&
         (completed == 2 || list->items[i].completed == completed)) {
       printw("%d. [%c] %s (Priority: %d)\n", i + 1,
              (list->items[i].completed ? 'x' : ' '), list->items[i].task,
              list->items[i].priority);
+      found = 1;
     }
   }
+
+  if (!found) {
+    printw("No tasks matched the filter\n");
+  }
+  printw("\nPress any key to return to the menu...");
+  refresh();
+  getch();
 }

@@ -70,40 +70,42 @@ int main(int argc, char *argv[]) {
     printw("5. Search task \n");
     printw("6. Filter tasks \n");
     printw("7. Save and quit \n");
+
+    printw("\nNow on page %d, with a total of %d tasks\n", page,
+           todolist.count);
     printw("p. Previous page \n");
     printw("n. Next page \n");
-    printw("Enter your choice: ");
+    printw("\nEnter your choice: ");
     refresh();
 
+    // echo();
+    // scanw("%d", &choice);
     echo();
-    scanw("%d", &choice);
+    choice = getch();
+    printw("\n");
     refresh();
 
     switch (choice) {
 
-    case 1:
+    case '1':
       addNewTask(&todolist);
       break;
-    case 2:
+    case '2':
       markTaskComplete(&todolist);
       break;
-    case 3:
+    case '3':
       deleteTask(&todolist);
       break;
-    case 4:
+    case '4':
       editTask(&todolist);
       break;
-    case 5:
+    case '5':
       searchTasks(&todolist);
-      echo();
-      refresh();
       break;
-    case 6:
+    case '6':
       filterTasks(&todolist);
-      echo();
-      refresh();
       break;
-    case 7:
+    case '7':
       saveToFile(&todolist, fileName);
       break;
     case 'p':
@@ -118,12 +120,11 @@ int main(int argc, char *argv[]) {
       break;
     default:
       printw("Invalid choice\n");
-      echo();
       refresh();
       break;
     }
-    refresh();
-  } while (choice != 7);
+  } while (choice != '7');
+  refresh();
 
   endwin();
   return 0;

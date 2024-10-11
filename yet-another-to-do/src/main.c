@@ -3,95 +3,46 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define maxItems 100
-#define maxLength 50
+#include "file_utils.h"
+#include "todolist.h"
 
-typedef struct {
-  char task[maxLength];
-  int completed;
-} todoItem;
+void printList(todoList *list, int page, int pageSize) {
+  int start = (page - 1) * pageSize;
+  int end = start + pageSize - 1;
 
-typedef struct {
-  todoItem items[maxItems];
-  int count;
-} todoList;
+  if (end >= list->count) {
+    end = list->count - 1;
+  }
 
-void saveToFile(todoList *list, const char *filename) {
-  FILE *fp = fopen(filename, "w");
-  if (fp != NULL) {
-    for (int i = 0; i < list->count; i++) {
-      fprintf(fp, "%d, %s\n", list->items[i].completed, list->items[i].task);
+  for (int i = start; i <= end; ++i) {
+    if (list->items[i].completed) {
+      attron(COLOR_PAIR(1));
+    } else {
+      attron(COLOR_PAIR(2));
     }
-  } else {
-    perror("Error opening file");
-    return;
-  }
-  fclose(fp);
-}
 
-void loadFromFile(todoList *list, const char *filename) {
-  FILE *fp = fopen(filename, "r");
-  if (fp != NULL) {
-    list->count = 0;
-    while (fscanf(fp, "%d, %[^\n]\n", &list->items[list->count].completed,
-                  list->items[list->count].task) == 2) {
-      list->count++;
-      if (list->count >= maxItems) {
-        break;
-      }
-    }
-  } else {
-    printf("Error opening file");
-    return;
-  }
-  // fclose(fp);
-}
-
-void addItem(todoList *list, const char *task) {
-  if (list->count >= maxItems) {
-    printf("Max items reached, please complete your previous tasks.");
-    return;
-  } else {
-    strcpy(list->items[list->count].task, task);
-    list->items[list->count].completed = 0;
-    list->count++;
+    printw("%d. [%c] %s (Priority: %d)\n", i + 1,
+           (list->items[i].completed ? 'x' : ' '), list->items[i].task,
+           list->items[i].priority);
+    attroff(COLOR_PAIR(1));
+    attroff(COLOR_PAIR(2));
   }
 }
 
-void deleteItem(todoList *list, int index) {
-  if (index < 0 || index >= list->count) {
-    printf("Invalid index\n");
-    return;
-  } else {
-    for (int i = index; i < list->count - 1; ++i) {
-      strcpy(list->items[i].task, list->items[i + 1].task);
-      list->items[i].completed = list->items[i + 1].completed;
-    }
-    list->count--;
-  }
-}
-
-void markComplete(todoList *list, int index) {
-  if (index < 0 || index >= list->count) {
-    printf("Invalid index\n");
-    return;
-  } else {
-    list->items[index].completed = 1;
-  }
-}
-
-void printList(todoList *list) {
-  for (int i = 0; i < list->count; ++i) {
-    printw("%d. [%c] %s\n", i + 1, (list->items[i].completed ? 'x' : ' '),
-           list->items[i].task);
-  }
-}
-
-int main() {
+int main(int argc, char *argv[]) {
   todoList todolist;
-  todolist.count = 0;
+  initializeTodoList(&todolist);
+
+  int pageSize = 10;
+  if (argc > 1) {
+    pageSize = atoi(argv[1]);
+  }
 
   initscr();
+  start_color();
+  init_pair(1, COLOR_GREEN, COLOR_BLACK);
+  init_pair(2, COLOR_RED, COLOR_BLACK);
+  init_pair(3, 15, COLOR_BLACK);
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
@@ -100,20 +51,27 @@ int main() {
   loadFromFile(&todolist, fileName);
 
   int choice;
-
-  char newTask[maxLength];
+  int page = 1;
 
   do {
     clear();
+    attron(COLOR_PAIR(3));
     printw("----Manage Your Task----\n");
     printw("------------------------\n");
-    printList(&todolist);
+    attroff(COLOR_PAIR(3));
+    printList(&todolist, page, pageSize);
 
     printw("\n\n");
+    attron(COLOR_PAIR(3));
     printw("1. Add new task \n");
     printw("2. Mark as completed \n");
     printw("3. Delete task \n");
-    printw("4. Save and quit \n");
+    printw("4. Edit task \n");
+    printw("5. Search task \n");
+    printw("6. Filter tasks \n");
+    printw("7. Save and quit \n");
+    printw("p. Previous page \n");
+    printw("n. Next page \n");
     printw("Enter your choice: ");
     refresh();
 
@@ -122,41 +80,50 @@ int main() {
     refresh();
 
     switch (choice) {
-      int indexChoice;
-    case 1:
-      clear();
-      printw("Add new task: ");
-      refresh();
-      echo();
-      getstr(newTask);
-      noecho();
-      addItem(&todolist, newTask);
-      break;
 
+    case 1:
+      addNewTask(&todolist);
+      break;
     case 2:
-      clear();
-      printw("Enter index of task to complete: ");
-      refresh();
-      scanw("%d", &indexChoice);
-      noecho();
-      markComplete(&todolist, indexChoice - 1);
+      markTaskComplete(&todolist);
       break;
     case 3:
-      clear();
-      printw("Enter the index of the task to delete: ");
-      refresh();
-      scanw("%d", &indexChoice);
-      deleteItem(&todolist, indexChoice - 1);
+      deleteTask(&todolist);
       break;
     case 4:
+      editTask(&todolist);
+      break;
+    case 5:
+      searchTasks(&todolist);
+      echo();
+      refresh();
+      break;
+    case 6:
+      filterTasks(&todolist);
+      echo();
+      refresh();
+      break;
+    case 7:
       saveToFile(&todolist, fileName);
+      break;
+    case 'p':
+      if (page > 1) {
+        page--;
+      }
+      break;
+    case 'n':
+      if (page < (todolist.count + pageSize - 1) / pageSize) {
+        page++;
+      }
       break;
     default:
       printw("Invalid choice\n");
+      echo();
+      refresh();
       break;
     }
     refresh();
-  } while (choice != 4);
+  } while (choice != 7);
 
   endwin();
   return 0;

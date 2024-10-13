@@ -42,7 +42,6 @@ void markTaskComplete(todoList *list) {
 
 void deleteTask(todoList *list) {
   int index;
-  clear();
   printw("Enter the index of the task to delete: ");
   refresh();
   scanw("%d", &index);

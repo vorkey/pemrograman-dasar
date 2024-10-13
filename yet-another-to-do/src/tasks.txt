@@ -1,14 +1,16 @@
 1, help us out, 1
-1, Sehingga merekapun, 2
-0, Niga Quandry, 3
-0, Pushero, 2
+1, I hate integrals, 5
+1, Niga Quandry, 3
+1, Nuh uh, 4
 0, help, 1
-0, six, 1
-0, bruh, 1
-0, Myyy, 1
+1, six, 1
+0, Yay Peace, 4
+1, mYYYY, 1
 0, tests again, 1
-0, dabaxa, 1
-0, retard alert, 1
-0, yeehaw, 1
-0, yuuuhuu, 1
-0, Migaas, 3
+0, Ywdh dh, 2
+1, retard alert, 1
+1, Why tho?, 1
+1, uh, 3
+1, new task, 1
+1, Yeee, 3
+0, new new, 1

@@ -24,7 +24,7 @@ int main() {
   cout << endl;
 
   for (int i = 0; i < ukuran; i++) {
-    for (int i = 0; i < ukuran; i++) {
+    for (int j = 0; j < ukuran; j++) {
       cout << " * ";
     }
     cout << endl;

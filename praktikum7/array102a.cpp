@@ -6,18 +6,18 @@
 
 int main() {
   int A[n];
-  int i, max;
+  int i, min;
   printf("Input %i bilangan:\n\n", n);
   for (int i = 0; i < n; i++) {
     printf("Bil %i: ", (i + 1));
     scanf("%i", &A[i]);
   }
-  max = A[0];
+  min = A[0];
   for (i = 1; i < n; i++) {
-    if (A[i] > max) {
-      max = A[i];
+    if (A[i] < min) {
+      min = A[i];
     }
   }
-  printf("Nilai terbesar = %i \n", max);
+  printf("Nilai terkecil = %i \n", min);
   return 0;
 }

@@ -6,18 +6,18 @@
 
 int main() {
   int A[n];
-  int i, max;
+  int i, total;
+  double ratarata;
   printf("Input %i bilangan:\n\n", n);
   for (int i = 0; i < n; i++) {
     printf("Bil %i: ", (i + 1));
     scanf("%i", &A[i]);
   }
-  max = A[0];
-  for (i = 1; i < n; i++) {
-    if (A[i] > max) {
-      max = A[i];
-    }
+  total = 0;
+  for (i = 0; i < n; i++) {
+    total += A[i];
   }
-  printf("Nilai terbesar = %i \n", max);
+  ratarata = total / 10.0;
+  printf("Rata-rata = %.2f \n", ratarata);
   return 0;
 }

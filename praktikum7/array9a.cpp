@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 int main() {
-  int A[5];
-  int i=0, X;
+  int A[5] = {0, 0, 0, 0, 0};
+  int i = 0, X;
 
   printf("Input bilangan (akhiri penginputan dengan '999'): \n\n");
 
@@ -15,15 +15,18 @@ int main() {
       printf("\nArray Penuh!");
       break;
     }
+    if (X == 999) {
+      printf("\nProgram Berakhir!");
+      break;
+    }
+    if (X % 2 == 1) {
+      A[i] = X;
+      i++;
+    }
   }
 
   for (i = 0; i < 5; i++) {
-    printf("Bil %i: ", (i + 1));
-  }
-
-  for (i = 0; i < 5; i += 2) {
     printf("%4i", A[i]);
   }
-
   return 0;
 }

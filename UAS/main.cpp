@@ -1,11 +1,13 @@
 // Ambadaya Gaman - C020324001 - Elektronika 1A
 // Jhonly Ardianto - C020324008 - Elektronika 1B
 
+#include <cctype>
 #include <iostream>
 #include <string>
 using namespace std;
 
 const int MAX_BARANG = 50; // Maksimum jumlah barang
+const string namaKategori[] = {"Elektronik", "Furniture", "Alat Tulis"};
 
 // Fungsi untuk menampilkan menu
 void tampilkanMenu() {
@@ -16,15 +18,17 @@ void tampilkanMenu() {
   cout << "4. Hitung Total Stok Barang\n";
   cout << "5. Hitung Total Nilai Gudang\n";
   cout << "6. Keluar\n";
-  cout << "Pilih Menu: \n";
+  cout << "Pilih Menu: ";
 }
+
+// Fungsi untuk mengubah kategori menjadi nama
+string tampilkanNamaKategori(int kategori) { return namaKategori[kategori]; }
 
 int main() {
   string namaBarang[MAX_BARANG];
   int stokBarang[MAX_BARANG];
   float hargaBarang[MAX_BARANG];
-  char kategoriBarang[MAX_BARANG]; // Kategori: A = Elektronik, B = Furniture, C
-                                   // = Alat Tulis
+  int kategoriBarang[MAX_BARANG];
   int jumlahBarang = 0;
   int pilihan;
 
@@ -55,11 +59,12 @@ int main() {
       if (jumlahBarang == 0) {
         cout << "Belum ada data barang di gudang.\n";
       } else {
-        cout << "\n=== Data Barang ===\n";
+        cout << "\n===== Data Barang =====\n";
         for (int i = 0; i < jumlahBarang; i++) {
           cout << i + 1 << ". " << namaBarang[i] << " - Stok: " << stokBarang[i]
                << " - Harga: Rp" << hargaBarang[i]
-               << " - Kategori: " << kategoriBarang[i] << "\n";
+               << " - Kategori: " << tampilkanNamaKategori(kategoriBarang[i])
+               << "\n";
         }
       }
       break;
@@ -77,7 +82,8 @@ int main() {
           if (namaBarang[i] == cariNama) {
             cout << "Barang ditemukan: " << namaBarang[i]
                  << " - Stok: " << stokBarang[i] << " - Harga: Rp"
-                 << hargaBarang[i] << " - Kategori: " << kategoriBarang[i]
+                 << hargaBarang[i]
+                 << " - Kategori: " << tampilkanNamaKategori(kategoriBarang[i])
                  << "\n";
             ditemukan = true;
             break;

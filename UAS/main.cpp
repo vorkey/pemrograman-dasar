@@ -106,7 +106,7 @@ int main() {
       if (jumlahBarang == 0) {
         cout << "Belum ada data barang di gudang.\n";
       } else {
-        float totalNilai = 0;
+        unsigned long long totalNilai = 0;
         for (int i = 0; i < jumlahBarang; i++) {
           totalNilai += stokBarang[i] * hargaBarang[i];
         }
@@ -118,8 +118,10 @@ int main() {
       cout << "Terima kasih telah menggunakan aplikasi ini.\n";
       break;
     }
-    default:
+    default: {
       cout << "Pilihan tidak valid, silakan coba lagi.\n";
+      break;
+    }
     }
   } while (pilihan != 6);
 

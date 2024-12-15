@@ -139,6 +139,33 @@ void cariBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
   }
 }
 
+// Fungsi untuk menghitung total stok barang
+void hitungTotalStok(int stokBarang[], int jumlahBarang) {
+  if (jumlahBarang == 0) {
+    cout << "Belum ada data barang di gudang.\n";
+  } else {
+    int totalStok = 0;
+    for (int i = 0; i < jumlahBarang; i++) {
+      totalStok += stokBarang[i];
+    }
+    cout << "Total stok semua barang: " << totalStok << "\n";
+  }
+}
+
+// Fungsi untuk menghitung total nilai gudang
+void hitungNilaiGudang(int stokBarang[], float hargaBarang[],
+                       int jumlahBarang) {
+  if (jumlahBarang == 0) {
+    cout << "Belum ada data barang di gudang.\n";
+  } else {
+    unsigned long long totalNilai = 0;
+    for (int i = 0; i < jumlahBarang; i++) {
+      totalNilai += stokBarang[i] * hargaBarang[i];
+    }
+    cout << "Total nilai gudang: Rp" << totalNilai << "\n";
+  }
+}
+
 int main() {
   string namaBarang[MAX_BARANG];
   int stokBarang[MAX_BARANG];
@@ -146,8 +173,6 @@ int main() {
   int kategoriBarang[MAX_BARANG];
   int jumlahBarang = 0;
   int pilihan;
-
-  cout << fixed << setprecision(2); // Format harga
 
   do {
     tampilkanMenu();
@@ -162,43 +187,29 @@ int main() {
 
     switch (pilihan) {
     case 1: // Tambah Data Barang
-
+      tambahBarang(namaBarang, stokBarang, hargaBarang, kategoriBarang,
+                   jumlahBarang);
+      break;
     case 2: // Tampilkan Semua Data Barang
-
+      tampilkanSemuaBarang(namaBarang, stokBarang, hargaBarang, kategoriBarang,
+                           jumlahBarang);
+      break;
     case 3: // Cari Barang Berdasarkan Nama
-
-    case 4: { // Hitung Total Stok Barang
-      if (jumlahBarang == 0) {
-        cout << "Belum ada data barang di gudang.\n";
-      } else {
-        int totalStok = 0;
-        for (int i = 0; i < jumlahBarang; i++) {
-          totalStok += stokBarang[i];
-        }
-        cout << "Total stok semua barang: " << totalStok << "\n";
-      }
+      cariBarang(namaBarang, stokBarang, hargaBarang, kategoriBarang,
+                 jumlahBarang);
       break;
-    }
-    case 5: { // Hitung Total Nilai Gudang
-      if (jumlahBarang == 0) {
-        cout << "Belum ada data barang di gudang.\n";
-      } else {
-        unsigned long long totalNilai = 0;
-        for (int i = 0; i < jumlahBarang; i++) {
-          totalNilai += stokBarang[i] * hargaBarang[i];
-        }
-        cout << "Total nilai gudang: Rp" << totalNilai << "\n";
-      }
+    case 4: // Hitung Total Stok Barang
+      hitungTotalStok(stokBarang, jumlahBarang);
       break;
-    }
-    case 6: { // Keluar
+    case 5: // Hitung Total Nilai Gudang
+      hitungNilaiGudang(stokBarang, hargaBarang, jumlahBarang);
+      break;
+    case 6: // Keluar
       cout << "Terima kasih telah menggunakan aplikasi ini.\n";
       break;
-    }
-    default: {
+    default:
       cout << "Pilihan tidak valid, silakan coba lagi.\n";
       break;
-    }
     }
   } while (pilihan != 6);
 

@@ -1,22 +1,45 @@
 // Ambadaya Gaman - C020324001 - Elektronika 1A
 // Jhonly Ardianto - C020324008 - Elektronika 1B
 
-#include <cctype>
+#include <cstdlib>
 #include <iomanip>
-#include <ios>
 #include <iostream>
 #include <string>
+
+// fungsi update barang dan hapus belum ada
 
 using namespace std;
 
 const int MAX_BARANG = 500; // Maksimum jumlah barang
-const string namaKategori[] = {"Elektronik", "Furniture", "Alat Tulis"};
+const string namaKategori[] = {"Elektronik", "Furniture",
+                               "Peralatan Rumah Tangga"};
 const int JUMLAH_KATEGORI =
     sizeof(namaKategori) /
     sizeof(namaKategori[0]); // Panjang Array namaKategori
 
+// Fungsi untuk membersihkan layar / terminal
+void bersihkanLayar() {
+#ifdef _WIN32
+  system("cls"); // Windows
+#else
+  system("clear"); // Linux / macOS
+#endif
+}
+
+// Fungsi untuk validasi angka
+int inputInteger() {
+  int value;
+  while (!(cin >> value)) {
+    cout << "Input tidak valid. Masukkan angka: ";
+    cin.clear();            // Reset status error pada cin
+    cin.ignore(1000, '\n'); // Abaikan input yang salah
+  }
+  return value;
+}
+
 // Fungsi untuk menampilkan menu
 void tampilkanMenu() {
+  bersihkanLayar();
   cout << "\n=========== MENU ==========\n";
   cout << "1. Tambah Data Barang\n";
   cout << "2. Tampilkan Semua Data Barang\n";
@@ -30,6 +53,7 @@ void tampilkanMenu() {
 // Fungsi untuk mengubah kategori menjadi Nama
 string tampilkanNamaKategori(int kategori) { return namaKategori[kategori]; }
 
+// Fungsi untuk validasi kategori
 int validasiKategori(char kategoriInput) {
   kategoriInput = toupper(kategoriInput);
 
@@ -40,7 +64,7 @@ int validasiKategori(char kategoriInput) {
   return -1; // Kategori tidak valid
 }
 
-// Fungsi untuk menambahkankan data barang
+// Fungsi untuk menambahkan data barang
 void tambahBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
                   int kategoriBarang[], int &jumlahBarang) {
   if (jumlahBarang < MAX_BARANG) {
@@ -49,14 +73,14 @@ void tambahBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
     getline(cin, namaBarang[jumlahBarang]);
 
     cout << "Masukkan jumlah stok barang: ";
-    cin >> stokBarang[jumlahBarang];
+    stokBarang[jumlahBarang] = inputInteger();
     if (stokBarang[jumlahBarang] < 0) {
       cout << "Stok tidak boleh negatif.\n";
       return;
     }
 
     cout << "Masukkan harga barang (per unit): ";
-    cin >> hargaBarang[jumlahBarang];
+    hargaBarang[jumlahBarang] = inputInteger();
     if (hargaBarang[jumlahBarang] < 0) {
       cout << "Harga barang tidak boleh negatif.\n";
       return;
@@ -64,7 +88,7 @@ void tambahBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
 
     char kategoriInput;
     cout << "Masukkan kategori barang (A = Elektronik, B = Furniture, C = "
-            "Alat Tulis): ";
+            "Peralatan Rumah Tangga): ";
     cin >> kategoriInput;
 
     int kategoriIndex = validasiKategori(kategoriInput);
@@ -87,10 +111,10 @@ void tampilkanSemuaBarang(string namaBarang[], int stokBarang[],
   if (jumlahBarang == 0) {
     cout << "Belum ada data barang di gudang.\n";
   } else {
-    cout << "\n===== Data Barang =====\n";
+    cout << "\n======= Data Barang =======\n";
     for (int i = 0; i < jumlahBarang; i++) {
       cout << i + 1 << ". " << namaBarang[i] << " - Stok: " << stokBarang[i]
-           << " - Harga: Rp" << fixed << setprecision(2) << hargaBarang[i]
+           << " - Harga: Rp. " << fixed << setprecision(2) << hargaBarang[i]
            << " - Kategori: " << tampilkanNamaKategori(kategoriBarang[i])
            << "\n";
     }
@@ -125,7 +149,7 @@ void cariBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
     for (int i = 0; i < jumlahBarang; i++) {
       if (samakanString(namaBarang[i], cariNama)) {
         cout << "Barang ditemukan: " << namaBarang[i]
-             << " - Stok: " << stokBarang[i] << " - Harga: Rp" << fixed
+             << " - Stok: " << stokBarang[i] << " - Harga: Rp. " << fixed
              << setprecision(2) << hargaBarang[i]
              << " - Kategori: " << tampilkanNamaKategori(kategoriBarang[i])
              << "\n";
@@ -162,7 +186,7 @@ void hitungNilaiGudang(int stokBarang[], float hargaBarang[],
     for (int i = 0; i < jumlahBarang; i++) {
       totalNilai += stokBarang[i] * hargaBarang[i];
     }
-    cout << "Total nilai gudang: Rp" << totalNilai << "\n";
+    cout << "Total nilai gudang: Rp. " << totalNilai << "\n";
   }
 }
 
@@ -210,6 +234,11 @@ int main() {
     default:
       cout << "Pilihan tidak valid, silakan coba lagi.\n";
       break;
+    }
+    if (pilihan != 6) {
+      cout << "\nTekan Enter untuk kembali ke menu...";
+      cin.ignore();
+      cin.get();
     }
   } while (pilihan != 6);
 

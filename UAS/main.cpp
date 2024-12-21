@@ -2,7 +2,6 @@
 // Jhonly Ardianto - C020324008 - Elektronika 1B
 
 #include <cstdlib>
-#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -26,7 +25,7 @@ void bersihkanLayar() {
 #endif
 }
 
-// Fungsi untuk validasi angka
+// Fungsi untuk validasi integer
 int inputInteger() {
   int value;
   while (!(cin >> value)) {
@@ -35,6 +34,21 @@ int inputInteger() {
     cin.ignore(1000, '\n'); // Abaikan input yang salah
   }
   return value;
+}
+
+// Fungsi untuk melakukan format angka ke rupiah
+string formatRupiah(int angka) {
+  string hasil = to_string(angka);
+
+  string formatted = "";
+  int hitung = 0;
+  for (int i = hasil.size() - 1; i >= 0; --i) {
+    formatted.insert(formatted.begin(), hasil[i]);
+    if (++hitung % 3 == 0 && i != 0) {
+      formatted.insert(formatted.begin(), '.');
+    }
+  }
+  return "Rp" + formatted;
 }
 
 // Fungsi untuk menampilkan menu
@@ -114,7 +128,7 @@ void tampilkanSemuaBarang(string namaBarang[], int stokBarang[],
     cout << "\n======= Data Barang =======\n";
     for (int i = 0; i < jumlahBarang; i++) {
       cout << i + 1 << ". " << namaBarang[i] << " - Stok: " << stokBarang[i]
-           << " - Harga: Rp. " << fixed << setprecision(2) << hargaBarang[i]
+           << " - Harga: " << formatRupiah(hargaBarang[i])
            << " - Kategori: " << tampilkanNamaKategori(kategoriBarang[i])
            << "\n";
     }
@@ -149,8 +163,8 @@ void cariBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
     for (int i = 0; i < jumlahBarang; i++) {
       if (samakanString(namaBarang[i], cariNama)) {
         cout << "Barang ditemukan: " << namaBarang[i]
-             << " - Stok: " << stokBarang[i] << " - Harga: Rp. " << fixed
-             << setprecision(2) << hargaBarang[i]
+             << " - Stok: " << stokBarang[i]
+             << " - Harga: " << formatRupiah(hargaBarang[i])
              << " - Kategori: " << tampilkanNamaKategori(kategoriBarang[i])
              << "\n";
         ditemukan = true;
@@ -186,7 +200,7 @@ void hitungNilaiGudang(int stokBarang[], float hargaBarang[],
     for (int i = 0; i < jumlahBarang; i++) {
       totalNilai += stokBarang[i] * hargaBarang[i];
     }
-    cout << "Total nilai gudang: Rp. " << totalNilai << "\n";
+    cout << "Total nilai gudang: " << formatRupiah(totalNilai) << "\n";
   }
 }
 

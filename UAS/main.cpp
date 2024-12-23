@@ -25,10 +25,12 @@ const int JUMLAH_KATEGORI =
 const int BARANG_PER_HALAMAN = 10;
 
 struct Barang {
+  int id;
   string nama;
   int stok;
   float harga;
   int kategori;
+  string tanggal;
 };
 
 vector<Barang> gudang;
@@ -96,13 +98,14 @@ void tampilkanTabel(const vector<Barang> &barang, int halaman) {
 // Fungsi untuk menampilkan menu
 void tampilkanMenu() {
   bersihkanLayar();
-  cout << "\n=========== MENU ==========\n"
+  cout << "\n"
+       << string(37, '=') << " MENU " << string(37, '=') << "\n"
        << "1. Tambah Data Barang\n"
        << "2. Tampilkan Semua Data Barang\n"
        << "3. Cari Barang Berdasarkan Nama\n"
        << "4. Hitung Total Stok Barang\n"
        << "5. Hitung Total Nilai Gudang\n"
-       << "6. Keluar\n"
+       << "7. Keluar\n"
        << "Pilih Menu: ";
 }
 
@@ -131,7 +134,7 @@ void tambahBarang() {
     return;
   }
 
-  cout << "Masukkan harga barang: ";
+  cout << "Masukkan harga barang: Rp";
   b.harga = inputInteger();
   if (b.harga < 0) {
     cout << "Harga barang tidak boleh negatif.\n";
@@ -162,7 +165,7 @@ void updateBarang() {
     getline(cin, gudang[index].nama);
     cout << "Stok barang baru: ";
     gudang[index].stok = inputInteger();
-    cout << "Harga barang baru: ";
+    cout << "Harga barang baru: Rp";
     gudang[index].harga = inputInteger();
     cout << "Kategori barang baru (0 = Elektronik, 1 = Furniture, 2 = "
             "Peralatan Rumah Tangga): ";
@@ -324,7 +327,7 @@ int main() {
       break;
     case 2: // Tampilkan Semua Data Barang
       tampilkanTabel(gudang, halaman);
-      cout << "Pindah halaman: (0: kembali): ";
+      cout << "Pindah halaman (0: kembali): ";
       halaman = inputInteger();
       if (halaman < 1 ||
           halaman > (int)(gudang.size() + BARANG_PER_HALAMAN - 1) /

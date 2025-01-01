@@ -12,13 +12,9 @@
 #include <string>
 #include <vector>
 
-// fungsi update barang dan hapus belum ada
-
 using namespace std;
 
-const int MAX_BARANG = 500; // Maksimum jumlah barang
-const string namaKategori[] = {"Elektronik", "Furniture",
-                               "Peralatan Rumah Tangga"};
+string namaKategori[] = {"Elektronik", "Furniture", "Dekorasi"};
 const int JUMLAH_KATEGORI =
     sizeof(namaKategori) /
     sizeof(namaKategori[0]); // Panjang Array namaKategori
@@ -29,7 +25,6 @@ struct Barang {
   int stok;
   float harga;
   int kategori;
-  string tanggal;
 };
 
 vector<Barang> gudang;
@@ -43,7 +38,7 @@ void bersihkanLayar() {
 #endif
 }
 
-// Fungsi untuk validasi integer
+// Fungsi untuk validasi integer & float
 int inputInteger() {
   int value;
   while (!(cin >> value)) {
@@ -70,7 +65,7 @@ string formatRupiah(int angka) {
 }
 
 // Fungsi untuk menampilkan data barang dalam tabel
-void tampilkanTabel(const vector<Barang> &barang, int halaman) {
+void tampilkanMenu(const vector<Barang> &barang, int halaman) {
   bersihkanLayar();
   int totalHalaman =
       (barang.size() + BARANG_PER_HALAMAN - 1) / BARANG_PER_HALAMAN;
@@ -78,8 +73,7 @@ void tampilkanTabel(const vector<Barang> &barang, int halaman) {
   int end = min((int)barang.size(), start + BARANG_PER_HALAMAN);
 
   cout << left << setw(5) << "No" << setw(30) << "Nama Barang" << setw(10)
-       << "Stok" << setw(15) << "Harga" << setw(20) << "Kategori" << setw(10)
-       << "Tanggal" << endl;
+       << "Stok" << setw(15) << "Harga" << setw(20) << "Kategori" << endl;
   cout << string(80, '=') << endl;
 
   for (int i = start; i < end; ++i) {
@@ -88,49 +82,31 @@ void tampilkanTabel(const vector<Barang> &barang, int halaman) {
         b.nama.size() > 25 ? b.nama.substr(0, 22) + "..." : b.nama;
     cout << left << setw(5) << i + 1 << setw(30) << namaPendek << setw(10)
          << b.stok << setw(15) << formatRupiah(b.harga) << setw(20)
-         << namaKategori[b.kategori] << setw(10) << b.tanggal << endl;
+         << namaKategori[b.kategori] << endl;
     cout << string(80, '=') << endl;
   }
 
-  cout << "\nHalaman " << halaman << " dari " << totalHalaman << endl;
-}
+  cout << "\nHalaman ke-" << halaman << " dari " << totalHalaman << " halaman"
+       << endl;
+  cout << setw(66) << "[p] Sebelumnya" << "Berikutnya [n]" << endl;
 
-// Fungsi untuk menampilkan menu
-void tampilkanMenu() {
-  bersihkanLayar();
-  cout << "\n"
-       << string(37, '=') << " MENU " << string(37, '=') << "\n"
-       << "1. Tambah Data Barang\n"
-       << "2. Tampilkan Semua Data Barang\n"
-       << "3. Cari Barang Berdasarkan Nama\n"
-       << "4. Sortir Barang\n"
-       << "5. Update Data Barang\n"
-       << "6. Hapus Data Barang\n"
-       << "7. Hitung Total Stok Barang\n"
-       << "8. Hitung Total Nilai Gudang\n"
-       << "9. Ekspor Data ke File CSV\n"
-       << "10. Impor Data dari File CSV\n"
-       << "11. Tentang aplikasi\n"
-       << "12. Keluar\n"
-       << "Pilih Menu: ";
-}
-
-// Fungsi untuk validasi kategori
-int validasiKategori(char kategoriInput) {
-  kategoriInput = toupper(kategoriInput);
-
-  int kategoriIndex = kategoriInput - 'A';
-  if (kategoriIndex >= 0 && kategoriIndex < JUMLAH_KATEGORI) {
-    return kategoriIndex; // Kategori valid
-  }
-  return -1; // Kategori tidak valid
+  cout << string(37, '=') << " MENU " << string(37, '=') << "\n"
+       << "[1] Tambah Data Barang\n"
+       << "[2] Update Data Barang\n"
+       << "[3] Hapus Data Barang\n"
+       << "[4] Cari Barang Berdasarkan Nama\n"
+       << "[5] Sortir Barang\n"
+       << "[6] Hitung Total Stok Barang\n"
+       << "[7] Hitung Total Nilai Gudang\n"
+       << "[8] Tentang aplikasi\n"
+       << "[0] Keluar\n"
+       << "Pilihan: ";
 }
 
 // Fungsi untuk menambahkan data barang
 void tambahBarang() {
   bersihkanLayar();
   Barang b;
-  cin.ignore();
   cout << "Masukkan nama barang : ";
   getline(cin, b.nama);
 
@@ -149,14 +125,12 @@ void tambahBarang() {
   }
 
   cout << "Masukkan kategori barang (0 = Elektronik, 1 = Furniture, 2 = "
-          "Peralatan Rumah Tangga): ";
+          "Dekorasi): ";
   b.kategori = inputInteger();
 
   if (!(b.kategori >= 0 && b.kategori < JUMLAH_KATEGORI)) {
     cout << "Kategori tidak valid, data barang tidak ditambahkan.\n";
   }
-
-  cout << "Masukkan tanggal ditambahkan barang? ini nanti dibuat dinamis ya~\n";
 
   gudang.push_back(b);
   cout << "Data barang berhasil ditambahkan!\n";
@@ -177,7 +151,7 @@ void updateBarang() {
     cout << "Harga barang baru: Rp";
     gudang[index].harga = inputInteger();
     cout << "Kategori barang baru (0 = Elektronik, 1 = Furniture, 2 = "
-            "Peralatan Rumah Tangga): ";
+            "Dekorasi): ";
     gudang[index].kategori = inputInteger();
     cout << "Barang berhasil diperbarui. \n";
   } else {
@@ -262,30 +236,25 @@ bool samakanString(string &a, string &b) {
 }
 
 // Fungsi untuk mencari barang berdasarkan nama
-void cariBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
-                int kategoriBarang[], int &jumlahBarang) {
-  if (jumlahBarang == 0) {
-    cout << "Belum ada data barang di gudang.\n";
-  } else {
-    string cariNama;
-    cout << "Masukkan nama barang yang akan dicari: ";
-    cin.ignore();
-    getline(cin, cariNama);
+void cariBarang() {
+  string cariNama;
+  cout << "Masukkan nama barang yang akan dicari: ";
+  cin.ignore();
+  getline(cin, cariNama);
 
-    bool ditemukan = false;
-    for (int i = 0; i < jumlahBarang; i++) {
-      if (samakanString(namaBarang[i], cariNama)) {
-        cout << "Barang ditemukan: " << namaBarang[i]
-             << " - Stok: " << stokBarang[i]
-             << " - Harga: " << formatRupiah(hargaBarang[i])
-             << " - Kategori: " << namaKategori[kategoriBarang[i]] << "\n";
-        ditemukan = true;
-        break;
-      }
+  bool ditemukan = false;
+  for (const auto &b : gudang) {
+    if (b.nama.find(cariNama) != string::npos) {
+      cout << "Barang ditemukan: " << b.nama << " - Stok: " << b.stok
+           << " - Harga: " << formatRupiah(b.harga)
+           << " - Kategori: " << namaKategori[b.kategori] << "\n";
+      ditemukan = true;
+      break;
     }
-    if (!ditemukan) {
-      cout << "Barang dengan nama \"" << cariNama << "\" tidak ditemukan.\n";
-    }
+  }
+
+  if (!ditemukan) {
+    cout << "Barang dengan nama \"" << cariNama << "\" tidak ditemukan.\n";
   }
 }
 
@@ -293,10 +262,9 @@ void cariBarang(string namaBarang[], int stokBarang[], float hargaBarang[],
 void sortirBarang() {
   bersihkanLayar();
   cout << "Sortir berdasarkan:\n"
-       << "1.Nama\n"
-       << "2.Tanggal Ditambahkan\n"
-       << "3.Stok\n"
-       << "4.Harga\n"
+       << "[1] Nama\n"
+       << "[2] Stok\n"
+       << "[3] Harga\n"
        << "Pilih: ";
   int pilihan = inputInteger();
 
@@ -308,15 +276,10 @@ void sortirBarang() {
     break;
   case 2:
     sort(gudang.begin(), gudang.end(),
-         [](Barang a, Barang b) { return a.tanggal < b.tanggal; });
-    cout << "Barang telah disortir berdasarkan tanggal ditambahkan.\n";
-    break;
-  case 3:
-    sort(gudang.begin(), gudang.end(),
          [](Barang a, Barang b) { return a.stok < b.stok; });
     cout << "Barang telah disortir berdasarkan stok.\n";
     break;
-  case 4:
+  case 3:
     sort(gudang.begin(), gudang.end(),
          [](Barang a, Barang b) { return a.harga < b.harga; });
     cout << "Barang telah disortir berdasarkan harga.\n";
@@ -327,99 +290,89 @@ void sortirBarang() {
 }
 
 // Fungsi untuk menghitung total stok barang
-void hitungTotalStok(int stokBarang[], int jumlahBarang) {
-  if (jumlahBarang == 0) {
-    cout << "Belum ada data barang di gudang.\n";
-  } else {
-    int totalStok = 0;
-    for (int i = 0; i < jumlahBarang; i++) {
-      totalStok += stokBarang[i];
-    }
-    cout << "Total stok semua barang: " << totalStok << "\n";
+void hitungTotalStok() {
+  int totalStok = 0;
+  for (const auto &b : gudang) {
+    totalStok += b.stok;
   }
+  cout << "Total stok semua barang: " << totalStok << "\n";
 }
 
 // Fungsi untuk menghitung total nilai gudang
-void hitungNilaiGudang(int stokBarang[], float hargaBarang[],
-                       int jumlahBarang) {
-  if (jumlahBarang == 0) {
-    cout << "Belum ada data barang di gudang.\n";
-  } else {
-    unsigned long long totalNilai = 0;
-    for (int i = 0; i < jumlahBarang; i++) {
-      totalNilai += stokBarang[i] * hargaBarang[i];
-    }
-    cout << "Total nilai gudang: " << formatRupiah(totalNilai) << "\n";
+void hitungNilaiGudang() {
+  unsigned long long totalNilai = 0;
+  for (const auto &b : gudang) {
+    totalNilai += b.stok * b.harga;
   }
+  cout << "Total nilai gudang: " << formatRupiah(totalNilai) << "\n";
 }
 
 int main() {
-  int pilihan, jumlahBarang = 0, halaman = 1;
+  char pilihan;
+  int jumlahBarang = 0, halaman = 1;
 
   do {
-    tampilkanMenu();
-    pilihan = inputInteger();
-
-    if (cin.fail()) { // Validasi input yang salah
-      cin.clear();
-      cin.ignore(1000, '\n');
-      cout << "Input tidak valid, silakan masukkan angka.\n";
-      continue;
-    }
+    bacaDariFile("data_barang.csv");
+    tampilkanMenu(gudang, halaman);
+    cin >> pilihan;
+    cin.ignore(1000, '\n');
 
     switch (pilihan) {
-    case 1: // Tambah Data Barang
-      tambahBarang();
-      break;
-    case 2: // Tampilkan Semua Data Barang
-      tampilkanTabel(gudang, halaman);
-      cout << "Pindah halaman (0: kembali): ";
-      halaman = inputInteger();
-      if (halaman < 1 ||
-          halaman > (int)(gudang.size() + BARANG_PER_HALAMAN - 1) /
-                        BARANG_PER_HALAMAN) {
-        halaman = 1;
+    case 'p':
+      if (halaman - 1 < 1) {
+        cout << "Sudah berada pada halaman pertama" << endl;
+      } else {
+        halaman--;
       }
+      cin.get();
       break;
-    case 3:
-      cariBarang(namaBarang, stokBarang, hargaBarang, kategoriBarang,
-                 jumlahBarang);
-    case 4:
-      sortirBarang();
+    case 'n':
+      halaman++;
+      cin.get();
       break;
-    case 5:
-      updateBarang();
-      break;
-    case 6:
-      hapusBarang();
-      break;
-    case 7:
-      hitungTotalStok(stokBarang, jumlahBarang);
-      break;
-    case 8:
-      hitungNilaiGudang(stokBarang, hargaBarang, jumlahBarang);
-      break;
-    case 9:
+    case '1':
+      tambahBarang();
       simpanKeFile("data_barang.csv");
+      cin.get();
       break;
-    case 10:
-      bacaDariFile("data_barang.csv");
+    case '2':
+      updateBarang();
+      simpanKeFile("data_barang.csv");
+      cin.get();
       break;
-    case 11:
-      cout << "Aplikasi ini bla bla.\n";
+    case '3':
+      hapusBarang();
+      simpanKeFile("data_barang.csv");
+      cin.get();
       break;
-    case 12:
+    case '4':
+      cariBarang();
+      cin.get();
+      break;
+    case '5':
+      sortirBarang();
+      cin.get();
+      break;
+    case '6':
+      hitungTotalStok();
+      cin.get();
+      break;
+    case '7':
+      hitungNilaiGudang();
+      cin.get();
+      break;
+    case '8':
+      cout << "Aplikasi ini dibuat untuk...\n";
+      cin.get();
+      break;
+    case '0':
       cout << "Terima kasih telah menggunakan aplikasi ini.\n";
+      simpanKeFile("data_barang.csv");
       break;
     default:
       cout << "Pilihan tidak valid, silakan coba lagi.\n";
     }
-    if (pilihan != 12) {
-      cout << "\nTekan Enter untuk kembali ke menu...";
-      cin.ignore();
-      cin.get();
-    }
-  } while (pilihan != 12);
+  } while (pilihan != '0');
 
   return 0;
 }

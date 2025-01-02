@@ -81,9 +81,9 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
   for (int i = start; i < end; ++i) {
     const Barang &b = barang[i];
     string namaPendek =
-        b.nama.size() > 25 ? b.nama.substr(0, 22) + "..." : b.nama;
+        b.nama.size() > 30 ? b.nama.substr(0, 27) + "..." : b.nama;
     cout << format("{:^5}", i + 1) << left << setw(30) << namaPendek
-         << format("{:^10}", b.stok) << setw(15) << formatRupiah(b.harga)
+         << format("{:^10}", b.stok) << format("{:>15}", formatRupiah(b.harga))
          << format("{:^20}", namaKategori[b.kategori]) << endl;
     cout << string(80, '=') << endl;
   }
@@ -106,6 +106,7 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
 }
 
 // Fungsi untuk menambahkan data barang
+// FIXME: negative integer input validation doesn't works as expected
 void tambahBarang() {
   Barang b;
   cout << "Masukkan nama barang : ";
@@ -237,6 +238,7 @@ bool samakanString(string &a, string &b) {
 }
 
 // Fungsi untuk mencari barang berdasarkan nama
+// TODO: display all matched items, search by substring instead
 void cariBarang() {
   string cariNama;
   cout << "Masukkan nama barang yang akan dicari: ";
@@ -326,6 +328,7 @@ void hitungNilaiGudang() {
   cout << "Total nilai gudang: " << formatRupiah(totalNilai) << "\n";
 }
 
+// TODO: add cancel selected option for relevant options
 int main() {
   char pilihan;
   int halaman = 1;
@@ -346,6 +349,7 @@ int main() {
       }
       break;
     case 'n':
+      // TODO: prevent navigation beyond last items page
       halaman++;
       break;
     case '1':

@@ -158,6 +158,7 @@ void tambahBarang() {
 
   gudang.push_back(b);
   cout << "Data barang berhasil ditambahkan!\n";
+  cin.get();
   simpanKeFile("data_barang.csv");
 }
 
@@ -267,6 +268,14 @@ void bacaDariFile(const string &filename) {
   }
 }
 
+// Fungsi untuk membuat semua karakter dalam string menjadi huruf kecil
+string lowercase(string input) {
+  for (char &c : input) {
+    c = tolower(c);
+  }
+  return input;
+}
+
 // Fungsi untuk mencari barang berdasarkan nama
 void cariBarang() {
   string cariNama;
@@ -275,7 +284,7 @@ void cariBarang() {
 
   bool ditemukan = false;
   for (const auto &b : gudang) {
-    if (b.nama.find(cariNama) != string::npos) {
+    if (lowercase(b.nama).find(lowercase(cariNama)) != string::npos) {
       cout << "Barang ditemukan: " << b.nama << " - Stok: " << b.stok
            << " - Harga: " << formatRupiah(b.harga)
            << " - Kategori: " << namaKategori[b.kategori] << "\n";
@@ -286,14 +295,6 @@ void cariBarang() {
   if (!ditemukan) {
     cout << "Barang dengan nama \"" << cariNama << "\" tidak ditemukan.\n";
   }
-}
-
-// Fungsi untuk membuat semua karakter dalam string menjadi huruf kecil
-string lowercase(string input) {
-  for (char &c : input) {
-    c = tolower(c);
-  }
-  return input;
 }
 
 // Fungsi untuk mengurutkan barang

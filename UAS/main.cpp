@@ -421,11 +421,49 @@ int main() {
       cin.get();
       break;
     case '8':
-      cout << "Aplikasi ini dibuat sebagai salah satu syarat dalam Ujian "
-              "Akhir Semester 1 mata kuliah Pemrograman Dasar pada program "
-              "studi D3 "
-              "Elektronika di Politeknik Negeri Banjarmasin tahun akademik "
-              "2024-2025.\n";
+      cout
+          << format("{:^80}", "TENTANG APLIKASI") << endl
+          << "\n"
+          << format("{:^80}", "Aplikasi ini berfungsi sebagai sistem "
+                              "pengelolaan data barang")
+          << endl
+          << format("{:^80}",
+                    "dalam suatu gudang, data yang bisa disimpan mencakup nama "
+                    "barang,")
+          << endl
+          << format(
+                 "{:^80}",
+                 "stok barang, harga barang, serta kategori barang, tema yang "
+                 "diambil")
+          << endl
+          << format(
+                 "{:^80}",
+                 "yaitu toko yang menjual barang-barang perabotan rumah tangga "
+                 "yang")
+          << endl
+          << format(
+                 "{:^80}",
+                 "besar contohnya sofa, TV, serta dekorasi misalnya wallpaper "
+                 "dinding")
+          << endl
+          << format("{:^80}",
+                    "atau lukisan, ya intinya toko perabotan seperti itu.")
+          << endl
+          << "\n"
+
+          << format("{:^80}",
+                    "Aplikasi ini dibuat sebagai salah satu syarat dalam Ujian "
+                    "Akhir")
+          << endl
+          << format("{:^80}", "Semester 1 mata kuliah Pemrograman Dasar pada "
+                              "program studi D3 ")
+          << endl
+          << format("{:^80}", "Elektronika di Politeknik Negeri Banjarmasin "
+                              "tahun akademik 2024-2025.\n")
+          << endl;
+      cout << format("{:^80}", "Anggota Kelompok (Nama - NIM):") << endl
+           << format("{:^80}", "Ambadaya Gaman - C020324001") << endl
+           << format("{:^80}", "Jhonly Ardianto - C020324008") << endl;
       cin.get();
       break;
     case '0':

@@ -20,6 +20,7 @@ const int JUMLAH_KATEGORI =
 const int BARANG_PER_HALAMAN = 10;
 int halamanAkhir;
 
+// Struktur data tiap barang
 struct Barang {
   string nama;
   int stok;
@@ -27,6 +28,7 @@ struct Barang {
   unsigned int kategori;
 };
 
+// Struktur data untuk menyimpan data barang
 vector<Barang> gudang;
 
 // Fungsi untuk membersihkan layar / terminal
@@ -102,6 +104,7 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
        << "[7] Hitung Total Nilai Gudang\n"
        << "[8] Tentang aplikasi\n"
        << "[0] Keluar\n"
+       << "(Tekan Ctrl + C untuk keluar program tanpa menyimpan data)\n"
        << "Pilihan: ";
 }
 
@@ -364,7 +367,6 @@ void hitungNilaiGudang() {
   cout << "Total nilai gudang: " << formatRupiah(totalNilai) << "\n";
 }
 
-// TODO: add cancel selected option for relevant options
 int main() {
   char pilihan;
   int halaman = 1;
@@ -472,6 +474,7 @@ int main() {
       break;
     default:
       cout << "Pilihan tidak valid, silakan coba lagi.\n";
+      cin.get();
     }
   } while (pilihan != '0');
 

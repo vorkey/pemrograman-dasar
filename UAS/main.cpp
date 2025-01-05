@@ -2,8 +2,6 @@
 // Jhonly Ardianto - C020324008 - Elektronika 1B
 
 #include <algorithm>
-#include <cstddef>
-#include <cstdio>
 #include <cstdlib>
 #include <format>
 #include <fstream>
@@ -153,30 +151,38 @@ void updateBarang() {
     cout << "Nama barang baru: ";
     cin.ignore();
     getline(cin, gudang[index].nama);
+
     cout << "Stok barang baru: ";
     gudang[index].stok = inputInteger();
+    if (gudang[index].stok < 0) {
+      cout << "Stok barang tidak boleh negatif.\n";
+      cin.get();
+      return;
+    }
+
     cout << "Harga barang baru: Rp";
     gudang[index].harga = inputInteger();
+    if (gudang[index].harga < 0) {
+      cout << "Harga barang tidak boleh negatif.\n";
+      cin.get();
+      return;
+    }
+
     cout << "Kategori barang baru (0 = Elektronik, 1 = Furniture, 2 = "
             "Dekorasi): ";
     gudang[index].kategori = inputInteger();
+    if (!(gudang[index].kategori >= 0 &&
+          gudang[index].kategori < JUMLAH_KATEGORI)) {
+      cout << "Kategori tidak valid, data barang tidak diperbarui.\n";
+      cin.get();
+      return;
+    }
+
     cout << "Barang berhasil diperbarui. \n";
+    cin.get();
   } else {
     cout << "Nomor barang tidak valid.\n";
-  }
-}
-
-// Fungsi untuk menghapus data barang
-void hapusBarang() {
-  int index;
-  cout << "Masukkan nomor barang yang ingin dihapus: ";
-  index = inputInteger() - 1;
-
-  if (index >= 0 && index < gudang.size()) {
-    gudang.erase(gudang.begin() + index);
-    cout << "Barang berhasil dihapus. \n";
-  } else {
-    cout << "Nomor barang tidak valid. \n";
+    cin.get();
   }
 }
 
@@ -196,6 +202,35 @@ void simpanKeFile(const string &filename) {
   }
 }
 
+// Fungsi untuk menghapus data barang
+void hapusBarang() {
+  int index;
+  cout << "Masukkan nomor barang yang ingin dihapus: ";
+  index = inputInteger() - 1;
+
+  if (index >= 0 && index < gudang.size()) {
+    gudang.erase(gudang.begin() + index);
+    cout << "Barang berhasil dihapus. \n";
+    simpanKeFile("data_barang.csv");
+    cin.get();
+  } else {
+    cout << "Nomor barang tidak valid. \n";
+    cin.get();
+  }
+}
+
+// Fungsi untuk membuat file data baru jika file tidak ada
+void buatFileJikaTidakAda(const string &filename) {
+  ofstream file(filename,
+                ios::app); // memastikan file dibuka tanpa di-overwrite
+  if (file.tellp() == 0) { // Jika file kosong atau baru dibuat
+    file << "Nama,Stok,Harga,Kategori\n"; // Header default
+    cout << "File \"" << filename
+         << "\" tidak ditemukan. File baru telah dibuat.\n";
+  }
+  file.close();
+}
+
 // Fungsi untuk membaca data dari file CSV
 void bacaDariFile(const string &filename) {
   ifstream file(filename);
@@ -205,7 +240,7 @@ void bacaDariFile(const string &filename) {
     getline(file, line);
     while (getline(file, line)) {
       Barang b;
-      size_t pos = 0;
+      unsigned long pos = 0;
       pos = line.find(',');
       b.nama = line.substr(0, pos);
       line.erase(0, pos + 1);
@@ -223,23 +258,9 @@ void bacaDariFile(const string &filename) {
       gudang.push_back(b);
     }
     file.close();
-    cout << "Data barang berhasil dibaca dari file.\n";
   } else {
     cout << "Gagal membuka file.\n";
   }
-}
-
-// Fungsi untuk mencocokkan string
-bool samakanString(string &a, string &b) {
-  if (a.size() != b.size()) {
-    return false;
-  }
-  for (int i = 0; i < (int)a.size(); ++i) {
-    if (tolower(a[i]) != tolower(b[i])) {
-      return false;
-    }
-  }
-  return true;
 }
 
 // Fungsi untuk mencari barang berdasarkan nama
@@ -263,6 +284,14 @@ void cariBarang() {
   }
 }
 
+// Fungsi untuk membuat semua karakter dalam string menjadi huruf kecil
+string lowercase(string input) {
+  for (char &c : input) {
+    c = tolower(c);
+  }
+  return input;
+}
+
 // Fungsi untuk mengurutkan barang
 void sortirBarang() {
   cout << "Sortir barang berdasarkan:\n"
@@ -277,13 +306,15 @@ void sortirBarang() {
 
   switch (pilihan) {
   case 1:
-    sort(gudang.begin(), gudang.end(),
-         [](Barang a, Barang b) { return a.nama < b.nama; });
+    sort(gudang.begin(), gudang.end(), [](Barang a, Barang b) {
+      return lowercase(a.nama) < lowercase(b.nama);
+    });
     cout << "Barang telah disortir berdasarkan nama sesuai abjad.\n";
     break;
   case 2:
-    sort(gudang.begin(), gudang.end(),
-         [](Barang a, Barang b) { return a.nama > b.nama; });
+    sort(gudang.begin(), gudang.end(), [](Barang a, Barang b) {
+      return lowercase(a.nama) > lowercase(b.nama);
+    });
     cout << "Barang telah disortir berdasarkan nama sesuai abjad dari "
             "belakang.\n";
     break;
@@ -311,6 +342,7 @@ void sortirBarang() {
     cout << "Pilihan tidak valid.\n";
   }
   simpanKeFile("data_barang.csv");
+  cin.get();
 }
 
 // Fungsi untuk menghitung total stok barang
@@ -371,7 +403,6 @@ int main() {
       break;
     case '3':
       hapusBarang();
-      simpanKeFile("data_barang.csv");
       cin.get();
       break;
     case '4':

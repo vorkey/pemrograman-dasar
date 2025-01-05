@@ -106,7 +106,6 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
 }
 
 // Fungsi untuk menambahkan data barang
-// FIXME: negative integer input validation doesn't works as expected
 void tambahBarang() {
   Barang b;
   cout << "Masukkan nama barang : ";
@@ -116,6 +115,7 @@ void tambahBarang() {
   b.stok = inputInteger();
   if (b.stok < 0) {
     cout << "Stok tidak boleh negatif.\n";
+    cin.get();
     return;
   }
 
@@ -123,6 +123,7 @@ void tambahBarang() {
   b.harga = inputInteger();
   if (b.harga < 0) {
     cout << "Harga barang tidak boleh negatif.\n";
+    cin.get();
     return;
   }
 
@@ -132,6 +133,8 @@ void tambahBarang() {
 
   if (!(b.kategori >= 0 && b.kategori < JUMLAH_KATEGORI)) {
     cout << "Kategori tidak valid, data barang tidak ditambahkan.\n";
+    cin.get();
+    return;
   }
 
   gudang.push_back(b);

@@ -20,6 +20,7 @@ const int JUMLAH_KATEGORI =
     sizeof(namaKategori) /
     sizeof(namaKategori[0]); // Panjang Array namaKategori
 const int BARANG_PER_HALAMAN = 10;
+int halamanAkhir;
 
 struct Barang {
   string nama;
@@ -72,6 +73,7 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
       (barang.size() + BARANG_PER_HALAMAN - 1) / BARANG_PER_HALAMAN;
   int start = (halaman - 1) * BARANG_PER_HALAMAN;
   int end = min((int)barang.size(), start + BARANG_PER_HALAMAN);
+  halamanAkhir = totalHalaman;
 
   cout << format("{:^5}", "No") << format("{:^30}", "Nama Barang")
        << format("{:^10}", "Stok") << format("{:^15}", "Harga")
@@ -241,10 +243,9 @@ bool samakanString(string &a, string &b) {
 }
 
 // Fungsi untuk mencari barang berdasarkan nama
-// TODO: display all matched items, search by substring instead
 void cariBarang() {
   string cariNama;
-  cout << "Masukkan nama barang yang akan dicari: ";
+  cout << "Masukkan nama barang yang ingin dicari: ";
   getline(cin, cariNama);
 
   bool ditemukan = false;
@@ -254,7 +255,6 @@ void cariBarang() {
            << " - Harga: " << formatRupiah(b.harga)
            << " - Kategori: " << namaKategori[b.kategori] << "\n";
       ditemukan = true;
-      break;
     }
   }
 
@@ -352,8 +352,12 @@ int main() {
       }
       break;
     case 'n':
-      // TODO: prevent navigation beyond last items page
-      halaman++;
+      if (halaman + 1 > halamanAkhir) {
+        cout << "Sudah berada pada halaman terakhir" << endl;
+        cin.get();
+      } else {
+        halaman++;
+      }
       break;
     case '1':
       tambahBarang();

@@ -105,6 +105,22 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
        << "Pilihan: ";
 }
 
+// Fungsi untuk menyimpan data ke file CSV
+void simpanKeFile(const string &filename) {
+  ofstream file(filename);
+  if (file.is_open()) {
+    file << "Nama,Stok,Harga,Kategori\n";
+    for (const auto &b : gudang) {
+      file << b.nama << ',' << b.stok << ',' << b.harga << ','
+           << namaKategori[b.kategori] << "\n";
+    }
+    file.close();
+    cout << "Data berhasil disimpan.\n";
+  } else {
+    cout << "Gagal membuka file.\n";
+  }
+}
+
 // Fungsi untuk menambahkan data barang
 void tambahBarang() {
   Barang b;
@@ -131,7 +147,7 @@ void tambahBarang() {
           "Dekorasi): ";
   b.kategori = inputInteger();
 
-  if (!(b.kategori >= 0 && b.kategori < JUMLAH_KATEGORI)) {
+  if (!(b.kategori < JUMLAH_KATEGORI)) {
     cout << "Kategori tidak valid, data barang tidak ditambahkan.\n";
     cin.get();
     return;
@@ -139,15 +155,16 @@ void tambahBarang() {
 
   gudang.push_back(b);
   cout << "Data barang berhasil ditambahkan!\n";
+  simpanKeFile("data_barang.csv");
 }
 
 // Fungsi untuk memperbarui data barang
 void updateBarang() {
-  int index;
+  unsigned int index;
   cout << "Masukkan nomor barang yang ingin diupdate: ";
   index = inputInteger() - 1;
 
-  if (index >= 0 && index < gudang.size()) {
+  if (index < gudang.size()) {
     cout << "Nama barang baru: ";
     cin.ignore();
     getline(cin, gudang[index].nama);
@@ -171,14 +188,14 @@ void updateBarang() {
     cout << "Kategori barang baru (0 = Elektronik, 1 = Furniture, 2 = "
             "Dekorasi): ";
     gudang[index].kategori = inputInteger();
-    if (!(gudang[index].kategori >= 0 &&
-          gudang[index].kategori < JUMLAH_KATEGORI)) {
+    if (!(gudang[index].kategori < JUMLAH_KATEGORI)) {
       cout << "Kategori tidak valid, data barang tidak diperbarui.\n";
       cin.get();
       return;
     }
 
     cout << "Barang berhasil diperbarui. \n";
+    simpanKeFile("data_barang.csv");
     cin.get();
   } else {
     cout << "Nomor barang tidak valid.\n";
@@ -186,29 +203,13 @@ void updateBarang() {
   }
 }
 
-// Fungsi untuk menyimpan data ke file CSV
-void simpanKeFile(const string &filename) {
-  ofstream file(filename);
-  if (file.is_open()) {
-    file << "Nama,Stok,Harga,Kategori\n";
-    for (const auto &b : gudang) {
-      file << b.nama << ',' << b.stok << ',' << b.harga << ','
-           << namaKategori[b.kategori] << "\n";
-    }
-    file.close();
-    cout << "Data berhasil disimpan.\n";
-  } else {
-    cout << "Gagal membuka file.\n";
-  }
-}
-
 // Fungsi untuk menghapus data barang
 void hapusBarang() {
-  int index;
+  unsigned int index;
   cout << "Masukkan nomor barang yang ingin dihapus: ";
   index = inputInteger() - 1;
 
-  if (index >= 0 && index < gudang.size()) {
+  if (index < gudang.size()) {
     gudang.erase(gudang.begin() + index);
     cout << "Barang berhasil dihapus. \n";
     simpanKeFile("data_barang.csv");
@@ -393,12 +394,10 @@ int main() {
       break;
     case '1':
       tambahBarang();
-      simpanKeFile("data_barang.csv");
       cin.get();
       break;
     case '2':
       updateBarang();
-      simpanKeFile("data_barang.csv");
       cin.get();
       break;
     case '3':
@@ -422,7 +421,7 @@ int main() {
       cin.get();
       break;
     case '8':
-      cout << "\tAplikasi ini dibuat sebagai salah satu syarat dalam Ujian "
+      cout << "Aplikasi ini dibuat sebagai salah satu syarat dalam Ujian "
               "Akhir Semester 1 mata kuliah Pemrograman Dasar pada program "
               "studi D3 "
               "Elektronika di Politeknik Negeri Banjarmasin tahun akademik "

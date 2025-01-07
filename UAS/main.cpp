@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <cstdlib>
-#include <format>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -75,18 +74,17 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
   int end = min((int)barang.size(), start + BARANG_PER_HALAMAN);
   halamanAkhir = totalHalaman;
 
-  cout << format("{:^5}", "No") << format("{:^30}", "Nama Barang")
-       << format("{:^10}", "Stok") << format("{:^15}", "Harga")
-       << format("{:^20}", "Kategori") << endl;
+  cout << left << setw(5) << "No" << setw(30) << "Nama Barang" << setw(10)
+       << "Stok" << setw(15) << "Harga" << setw(20) << "Kategori" << endl;
   cout << string(80, '=') << endl;
 
   for (int i = start; i < end; ++i) {
     const Barang &b = barang[i];
     string namaPendek =
         b.nama.size() > 30 ? b.nama.substr(0, 27) + "..." : b.nama;
-    cout << format("{:^5}", i + 1) << left << setw(30) << namaPendek
-         << format("{:^10}", b.stok) << format("{:>15}", formatRupiah(b.harga))
-         << format("{:^20}", namaKategori[b.kategori]) << endl;
+    cout << setw(5) << i + 1 << left << setw(30) << namaPendek << setw(10)
+         << b.stok << setw(15) << formatRupiah(b.harga) << setw(20)
+         << namaKategori[b.kategori] << endl;
     cout << string(80, '=') << endl;
   }
 
@@ -94,7 +92,7 @@ void tampilkanMenu(const vector<Barang> &barang, int halaman) {
        << endl;
   cout << setw(66) << "[p] Sebelumnya" << "Berikutnya [n]" << endl;
 
-  cout << format("{:^80}", " MENU UTAMA ") << "\n"
+  cout << right << setw(46) << " MENU UTAMA " << endl
        << "[1] Tambah Data Barang\n"
        << "[2] Update Data Barang\n"
        << "[3] Hapus Data Barang\n"
@@ -371,6 +369,7 @@ void hitungNilaiGudang() {
 int main() {
   char pilihan;
   int halaman = 1;
+  buatFileJikaTidakAda("data_barang.csv");
 
   do {
     bacaDariFile("data_barang.csv");
@@ -424,49 +423,36 @@ int main() {
       cin.get();
       break;
     case '8':
-      cout
-          << format("{:^80}", "TENTANG APLIKASI") << endl
-          << "\n"
-          << format("{:^80}", "Aplikasi ini berfungsi sebagai sistem "
-                              "pengelolaan data barang")
-          << endl
-          << format("{:^80}",
-                    "dalam suatu gudang, data yang bisa disimpan mencakup nama "
-                    "barang,")
-          << endl
-          << format(
-                 "{:^80}",
-                 "stok barang, harga barang, serta kategori barang, tema yang "
-                 "diambil")
-          << endl
-          << format(
-                 "{:^80}",
-                 "yaitu toko yang menjual barang-barang perabotan rumah tangga "
-                 "yang")
-          << endl
-          << format(
-                 "{:^80}",
-                 "besar contohnya sofa, TV, serta dekorasi misalnya wallpaper "
-                 "dinding")
-          << endl
-          << format("{:^80}",
-                    "atau lukisan, ya intinya toko perabotan seperti itu.")
-          << endl
-          << "\n"
+      cout << right << setw(48) << "TENTANG APLIKASI" << endl
+           << "\n"
+           << "    Aplikasi ini berfungsi sebagai sistem pengelolaan data "
+              "barang dalam suatu"
+           << endl
+           << "gudang, data yang bisa disimpan mencakup nama barang, stok "
+              "barang, harga"
+           << endl
+           << "barang, serta kategori barang, tema yang diambil yaitu toko "
+              "yang menjual"
+           << endl
+           << "barang-barang perabotan rumah tangga contohnya sofa, TV, serta "
+              "dekorasi"
+           << endl
+           << "misalnya wallpaper dinding atau lukisan, ya intinya toko "
+              "perabotan seperti itu."
+           << endl
+           << "\n"
+           << "    Aplikasi ini dibuat sebagai salah satu syarat dalam Ujian "
+              "Akhir Semester 1"
+           << endl
+           << "mata kuliah Pemrograman Dasar pada program studi D3 "
+              "Elektronika di Politeknik"
+           << endl
+           << "Negeri Banjarmasin tahun akademik 2024-2025.\n"
+           << endl;
 
-          << format("{:^80}",
-                    "Aplikasi ini dibuat sebagai salah satu syarat dalam Ujian "
-                    "Akhir")
-          << endl
-          << format("{:^80}", "Semester 1 mata kuliah Pemrograman Dasar pada "
-                              "program studi D3 ")
-          << endl
-          << format("{:^80}", "Elektronika di Politeknik Negeri Banjarmasin "
-                              "tahun akademik 2024-2025.\n")
-          << endl;
-      cout << format("{:^80}", "Anggota Kelompok (Nama - NIM):") << endl
-           << format("{:^80}", "Ambadaya Gaman - C020324001") << endl
-           << format("{:^80}", "Jhonly Ardianto - C020324008") << endl;
+      cout << "Anggota Kelompok (Nama - NIM):" << endl
+           << "    - Ambadaya Gaman - C020324001" << endl
+           << "    - Jhonly Ardianto - C020324008" << endl;
       cin.get();
       break;
     case '0':

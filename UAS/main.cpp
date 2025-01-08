@@ -18,6 +18,7 @@ const int JUMLAH_KATEGORI =
     sizeof(namaKategori[0]); // Panjang Array namaKategori
 const int BARANG_PER_HALAMAN = 10;
 int halamanAkhir;
+const string FILENAME = "data_barang.csv";
 
 // Struktur data tiap barang
 struct Barang {
@@ -157,7 +158,7 @@ void tambahBarang() {
   gudang.push_back(b);
   cout << "Data barang berhasil ditambahkan!\n";
   cin.get();
-  simpanKeFile("data_barang.csv");
+  simpanKeFile(FILENAME);
 }
 
 // Fungsi untuk memperbarui data barang
@@ -197,7 +198,7 @@ void updateBarang() {
     }
 
     cout << "Barang berhasil diperbarui. \n";
-    simpanKeFile("data_barang.csv");
+    simpanKeFile(FILENAME);
     cin.get();
   } else {
     cout << "Nomor barang tidak valid.\n";
@@ -214,24 +215,27 @@ void hapusBarang() {
   if (index < gudang.size()) {
     gudang.erase(gudang.begin() + index);
     cout << "Barang berhasil dihapus. \n";
-    simpanKeFile("data_barang.csv");
+    simpanKeFile(FILENAME);
     cin.get();
   } else {
     cout << "Nomor barang tidak valid. \n";
-    cin.get();
+    cin.get()
   }
 }
 
 // Fungsi untuk membuat file data baru jika file tidak ada
 void buatFileJikaTidakAda(const string &filename) {
-  ofstream file(filename,
-                ios::app); // memastikan file dibuka tanpa di-overwrite
-  if (file.tellp() == 0) { // Jika file kosong atau baru dibuat
-    file << "Nama,Stok,Harga,Kategori\n"; // Header default
-    cout << "File \"" << filename
-         << "\" tidak ditemukan. File baru telah dibuat.\n";
+  ifstream checkFile(filename);
+  if (!checkFile.good()) { // Jika file kosong atau baru dibuat
+    ofstream file(filename);
+    if (file.is_open()) {
+      file << "Nama,Stok,Harga,Kategori\n"; // Header default
+      cout << "File \"" << filename
+           << "\" tidak ditemukan. File baru telah dibuat.\n";
+      cin.get();
+    }
+    file.close();
   }
-  file.close();
 }
 
 // Fungsi untuk membaca data dari file CSV
@@ -344,7 +348,7 @@ void sortirBarang() {
   default:
     cout << "Pilihan tidak valid.\n";
   }
-  simpanKeFile("data_barang.csv");
+  simpanKeFile(FILENAME);
   cin.get();
 }
 
@@ -369,10 +373,10 @@ void hitungNilaiGudang() {
 int main() {
   char pilihan;
   int halaman = 1;
-  buatFileJikaTidakAda("data_barang.csv");
+  buatFileJikaTidakAda(FILENAME);
 
   do {
-    bacaDariFile("data_barang.csv");
+    bacaDariFile(FILENAME);
     tampilkanMenu(gudang, halaman);
     cin >> pilihan;
     cin.ignore(1000, '\n');
@@ -458,7 +462,7 @@ int main() {
       break;
     case '0':
       cout << "Terima kasih telah menggunakan aplikasi ini.\n";
-      simpanKeFile("data_barang.csv");
+      simpanKeFile(FILENAME);
       break;
     default:
       cout << "Pilihan tidak valid, silakan coba lagi.\n";

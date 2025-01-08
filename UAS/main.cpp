@@ -219,7 +219,7 @@ void hapusBarang() {
     cin.get();
   } else {
     cout << "Nomor barang tidak valid. \n";
-    cin.get()
+    cin.get();
   }
 }
 
@@ -230,9 +230,6 @@ void buatFileJikaTidakAda(const string &filename) {
     ofstream file(filename);
     if (file.is_open()) {
       file << "Nama,Stok,Harga,Kategori\n"; // Header default
-      cout << "File \"" << filename
-           << "\" tidak ditemukan. File baru telah dibuat.\n";
-      cin.get();
     }
     file.close();
   }

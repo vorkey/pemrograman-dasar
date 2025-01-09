@@ -423,6 +423,7 @@ int main() {
       cin.get();
       break;
     case '8':
+      bersihkanLayar();
       cout << right << setw(48) << "TENTANG APLIKASI" << endl
            << "\n"
            << "    Aplikasi ini berfungsi sebagai sistem pengelolaan data "

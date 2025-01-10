@@ -66,7 +66,7 @@ string formatRupiah(int angka) {
   return "Rp" + rupiah;
 }
 
-// Fungsi untuk menampilkan data barang dalam tabel
+// Fungsi untuk menampilkan data barang dan menu utama
 void tampilkanMenu(const vector<Barang> &barang, int halaman) {
   bersihkanLayar();
   int totalHalaman =
@@ -226,7 +226,7 @@ void hapusBarang() {
 // Fungsi untuk membuat file data baru jika file tidak ada
 void buatFileJikaTidakAda(const string &filename) {
   ifstream checkFile(filename);
-  if (!checkFile.good()) { // Jika file kosong atau baru dibuat
+  if (!checkFile.good()) {
     ofstream file(filename);
     if (file.is_open()) {
       file << "Nama,Stok,Harga,Kategori\n"; // Header default
